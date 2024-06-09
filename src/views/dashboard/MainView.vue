@@ -29,11 +29,7 @@ export default {
 			tab: null,
 			moleculesInfo: [],
 			items: [
-				{ tab: 'Molecules', component: 'Molecules' },
-				{ tab: 'Substructures', component: 'Substructures' },
-				{ tab: 'Working', component: 'Others' },
-				{ tab: 'Chemistry transformations', component: 'Others' },
-				{ tab: 'Chemistry reactions', component: 'Others' },
+				{ tab: 'Molecules', component: 'Molecules' }
 
 
 			]

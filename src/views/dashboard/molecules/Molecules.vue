@@ -9,8 +9,25 @@
                     <v-list-item class="pa-2" @click="openChangeType()">Conversión de tipos</v-list-item>
                     <v-divider></v-divider>
 
+                    <v-list-item class="pa-2" >Descriptores</v-list-item>
+                    <v-divider></v-divider>
+                    
+                    <v-list-item class="pa-2" >Fingerprints</v-list-item>
+                    <v-divider></v-divider>
+                    
+                    <v-list-item class="pa-2" >Coeficiente de Tanimoto</v-list-item>
+                    <v-divider></v-divider>
+
                     <v-list-item class="pa-2" @click="openSearchSubstructures()">Búsqueda de subestructuras</v-list-item>
                     <v-divider></v-divider>
+
+                    <v-list-item class="pa-2" @click="openChemistryTransformations()">Transformaciones químicas</v-list-item>
+                    <v-divider></v-divider>
+
+                    <v-list-item class="pa-2" >Reacciones químicas</v-list-item>
+                    <v-divider></v-divider>
+
+                    
 
                 </v-list>
 
@@ -56,6 +73,7 @@
         <NewMolecule ref="newMolecule" @add="addMolecule"/>
         <ChangeTypeDialog ref="changeTypeMolecule" />
         <SearchSubstructuresDialog ref="searchSubstructures" />
+        <ChemistryTransformationsDialog ref="chemistryTransformations"  />
 
 
     </v-container>
@@ -67,13 +85,14 @@
 import NewMolecule from './NewMoleculeDialog'
 import ChangeTypeDialog from './ChangeTypeDialog'
 import SearchSubstructuresDialog from './SearchSubstructuresDialog'
+import ChemistryTransformationsDialog from './ChemistryTransformationsDialog'
 import MoleculeServices from '@/services/MoleculeServices'
 import DateFormatter from '@/utils/DateFormatter'
 
 
 export default {
 
-    components: { NewMolecule, ChangeTypeDialog, SearchSubstructuresDialog },
+    components: { NewMolecule, ChangeTypeDialog, SearchSubstructuresDialog, ChemistryTransformationsDialog },
     data() {
         return {
             moleculesInfo: []
@@ -89,6 +108,9 @@ export default {
         },
         openSearchSubstructures(){
             this.$refs.searchSubstructures.open()
+        },
+        openChemistryTransformations(){
+            this.$refs.chemistryTransformations.open()
         },
         format(date){
             return DateFormatter.format(date)
