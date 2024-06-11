@@ -11,34 +11,41 @@
             </v-card-title>
             <v-card-text class="py-0">
                 <v-col cols="12" class="d-flex pa-0">
-                    <v-col cols="2">
-                        <v-select label="Select" v-model="selectedItem"
-                            :items="['Mis moléculas', 'SMART', 'SMILES']"></v-select>
+                    <v-col cols="5">
+                        <v-select label="Molécula" v-model="typeMol" :items="types"></v-select>
 
                     </v-col>
-                    <v-col cols="10">
-                        <v-text-field v-model="smileText"></v-text-field>
+                    <v-col cols="7">
+                        <v-text-field v-model="mol"></v-text-field>
                     </v-col>
                 </v-col>
 
                 <v-col cols="12" class="d-flex pa-0">
-                    <v-col cols="2">
-                        <v-select label="Select" v-model="selectedItem"
-                            :items="[ 'SMART', 'SMILES']"></v-select>
+                    <v-col cols="5">
+                        <v-select label="Subestructura" v-model="typeSub" :items="types"></v-select>
 
                     </v-col>
-                    <v-col cols="5">
-                        <v-text-field v-model="smileText"></v-text-field>
+                    <v-col cols="7">
+                        <v-text-field v-model="sub"></v-text-field>
                     </v-col>
+                    <!--
                     <v-col cols="3">
                         <v-switch label="Quiralidad"></v-switch>
                     </v-col>
-                    <v-col cols="2" class="text-right">
-                        <v-btn :disabled="!selectedItem" color="secondary" @click="generateMolecule" class="py-2">
+                    -->
+
+                    
+                </v-col>
+                <v-col cols="12" class="text-right">
+                        <v-btn  color="secondary" @click="searchSubstructure" class="py-2">
                             <font-awesome-icon icon="fa-solid fa-hammer" />
 
                         </v-btn>
-                    </v-col>
+                </v-col>
+                <v-col cols="12" class="container">
+                    <span  v-if="arraySub.length >0">
+                        Resultado: {{ arraySub }}
+                    </span>
                 </v-col>
 
 
@@ -51,10 +58,17 @@
 
 
 <script>
+import SearchSubstructureService from '@/services/SearchSubstructuresServices'
 export default {
     data() {
         return {
-            show: false
+            show: false,
+            types: ['SMARTS', 'SMILES'],
+            typeMol: null,
+            mol: '',
+            typeSub: null,
+            sub: '',
+            arraySub:[]
         }
     },
     methods: {
@@ -63,7 +77,19 @@ export default {
         },
         close() {
             this.show = false
+        },
+        async searchSubstructure(){
+            const response = await SearchSubstructureService.searchSubstructure(this.typeMol, this.mol, this.typeSub, this.sub)
+            console.log(response)
+            this.arraySub = response
         }
     }
 }
 </script>
+
+
+<style scoped>
+.container {
+    height: 100px;
+}
+</style>

@@ -11,50 +11,38 @@
             </v-card-title>
             <v-card-text class="py-0">
                 <v-col cols="12" class="d-flex pa-0">
-                    <v-col cols="5">
-                        <v-select label="Select" v-model="selectedItem" :items="['molToSmiles', 'MolFromSmiles', 'MolToMolBlock']"></v-select>
-
+                    <v-col cols="6" class="py-0">
+                        <v-select label="De" v-model="from_type" :items="types">
+                        </v-select>
                     </v-col>
-                    <v-col cols="6">
-                        <v-text-field v-model="smileText" v-if="selectedItem == 'SMILES'"></v-text-field>
-                        <v-file-input v-model="file" v-if="selectedItem == 'Archivo .mol'"></v-file-input>
-                    </v-col>
-                    <v-col cols="1">
-
-                        <v-btn icon color="secondary" @click="generateMolecule">
-                            <font-awesome-icon icon="fa-solid fa-circle-play" />
-
-                        </v-btn>
+                    <v-col cols="6" class="py-0">
+                        <v-select label="A" v-model="to_type" :items="types"></v-select>
                     </v-col>
                 </v-col>
-                
-                <v-col cols="12" class="d-flex pa-0">
-                    <v-col cols="5">
-                        <div class="image-container">
-                            <img :src="imageUrl" alt="..." />
-                        </div>
+                <v-col class="12">
+                    <v-textarea v-model="value">
 
-                    </v-col>
-                    <v-col cols="7" v-if="smileText">
-                        <v-text-field label="Name"></v-text-field>
-                        <v-text-field>{{ smileText }}</v-text-field>
-                        <v-text-field>{{ Date() }}</v-text-field>
-
-                    </v-col>
-
+                    </v-textarea>
                 </v-col>
-          
+                <v-col cols="12" class="text-right">
+                    <v-btn color="secondary" @click="convert" class="py-2">
+                        <font-awesome-icon icon="fa-solid fa-hammer" />
+
+                    </v-btn>
+                </v-col>
+
+                <v-col cols="12" class="container">
+                    <span v-if="result">
+                        Resultado:<br />
+
+                        <v-textarea v-model="result">
+
+                        </v-textarea>
+                    </span>
+                </v-col>
+
             </v-card-text>
-            <v-card-actions>
-                    <v-col cols="12" class="d-flex pa-0">
-                        <v-spacer></v-spacer>
-                        <v-btn color="secondary" @click="saveMoleculeInfo()">
-                            <font-awesome-icon icon="fa-solid fa-atom" />
-                            Guardar
-                        </v-btn>
-                    </v-col>
-            </v-card-actions>
-            
+
         </v-card>
     </v-dialog>
 </template>
@@ -62,16 +50,18 @@
 
 
 <script>
-import MoleculeServices from '@/services/MoleculeServices'
+import ConvertServices from '@/services/ConvertServices'
 export default {
     data() {
         return {
             show: false,
-            selectedItem: null,
-            smileText: null,
-            imageUrl: null,
-            blobImg: null,
-            file: null
+            from_type: null,
+            to_type: null,
+            types: [
+                'SMILES', 'MolBlock', 'Inchi', 'SMARTS'
+            ],
+            value: '',
+            result: null
         }
     },
     methods: {
@@ -79,44 +69,17 @@ export default {
             console.log("BBB")
             this.show = true
         },
-        async generateMolecule() {
-            if (this.selectedItem == 'SMILES') {
-                const response = await MoleculeServices.getMoleculeSmiles(this.smileText)
-                this.imageUrl = URL.createObjectURL(response);
-                this.blobImg = response
-                console.log(response)
-                console.log(this.smileText)
-                console.log(this.imageUrl)
+        async convert() {
+            const data = {
+                "from_type": this.from_type,
+                "to_type": this.to_type,
+                "value": this.value
             }
-            if (this.selectedItem == 'Archivo .mol') {
-                console.log(this.file[0])
-                const response = await MoleculeServices.postMoleculeFile(this.file[0])
-                this.imageUrl = URL.createObjectURL(response);
-                this.blobImg = response
-                console.log(this.imageUrl)
-            }
-        },
-        async saveMoleculeInfo() {
-            var reader = new FileReader();
-            console.log("AAAAAA")
-            console.log(this.imageUrl)
-            reader.readAsDataURL(this.blobImg);
-            reader.onloadend = async function () {
-                var base64data = reader.result;
-                const data = {
-                    "name": "test",
-                    "userId": 33,
-                    "image": base64data,
-                    "date": 1
-                }
-                await MoleculeServices.postMoleculeInfo(data)
-            }
-
-
-        },
-        saveImage(base64String) {
-            console.log(base64String)
+            const result = await ConvertServices.convert(data)
+            console.log(result)
+            this.result = result
         }
+
     }
 }
 </script>
@@ -143,5 +106,11 @@ export default {
     /* La imagen no supera la altura del contenedor */
     object-fit: cover;
     /* La imagen cubre completamente el espacio reservado */
+}
+</style>
+
+<style scoped>
+.container {
+    height: 200px;
 }
 </style>

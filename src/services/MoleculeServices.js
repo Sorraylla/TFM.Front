@@ -22,6 +22,17 @@ export default {
 
     return await OAuth.parseResponseAsBlob(response);
   },
+  deleteMolecule: async(id) => {
+    const response = await fetch(`${URL}/molecule/?id_molecule=${id}`, {
+      method: "DELETE",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    return await OAuth.parseResponse(response);
+  },
+
   postMoleculeInfo: async (info) => {
     const response = await fetch(`${URL}/molecule/`, {
       method: "POST",
