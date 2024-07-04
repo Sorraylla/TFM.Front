@@ -22,7 +22,7 @@ export default {
 
     return await OAuth.parseResponseAsBlob(response);
   },
-  deleteMolecule: async(id) => {
+  deleteMolecule: async (id) => {
     const response = await fetch(`${URL}/molecule/?id_molecule=${id}`, {
       method: "DELETE",
       headers: {
@@ -43,10 +43,27 @@ export default {
       body: JSON.stringify(info),
     });
 
-    const value =  await OAuth.parseResponse(response);
-    console.log(value)
-    return value
+    const value = await OAuth.parseResponse(response);
+    return value;
   },
+  updateMolecule: async (info) => {
+    const response = await fetch(`${URL}/molecule/`, {
+      method: "PUT",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(info),
+    });
+
+    const value = await OAuth.parseResponse(response);
+    return value;
+  },
+
+
+
+
+
   getMoleculeSmilesInfo: async (userId) => {
     const response = await fetch(`${URL}/molecules/?userId=${userId}`);
     return await OAuth.parseResponse(response);

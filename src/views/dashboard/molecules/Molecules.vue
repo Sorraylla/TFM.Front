@@ -10,13 +10,10 @@
                     <v-list-item class="pa-2" @click="openChangeType()">Conversión de tipos</v-list-item>
                     <v-divider></v-divider>
 
-                    <v-list-item class="pa-2">Descriptores</v-list-item>
+                    <v-list-item class="pa-2" @click="openDescriptorDialog()">Descriptores</v-list-item>
                     <v-divider></v-divider>
 
-                    <v-list-item class="pa-2">Fingerprints</v-list-item>
-                    <v-divider></v-divider>
-
-                    <v-list-item class="pa-2">Coeficiente de Tanimoto</v-list-item>
+                    <v-list-item class="pa-2" @click="openFingerprints()">Fingerprints y Similitud</v-list-item>
                     <v-divider></v-divider>
 
                     <v-list-item class="pa-2" @click="openSearchSubstructures()">Búsqueda de
@@ -27,7 +24,7 @@
                         químicas</v-list-item>
                     <v-divider></v-divider>
 
-                    <v-list-item class="pa-2">Reacciones químicas</v-list-item>
+                    <v-list-item class="pa-2" @click="openChemistryReactions()">Reacciones químicas</v-list-item>
                     <v-divider></v-divider>
 
 
@@ -44,7 +41,7 @@
                         <v-card-title class="d-flex pb-0 pr-2">
                             {{ m.name ? m.name : '-' }}
                             <v-spacer></v-spacer>
-                            <v-icon size="small" @click="updateMol(mol)">mdi-pencil</v-icon>
+                            <v-icon size="small" @click="updateMol(m)">mdi-pencil</v-icon>
                             <v-icon size="small" @click="removeMol(m)">mdi-delete</v-icon>
 
                         </v-card-title>
@@ -74,9 +71,13 @@
 
 
         <NewMolecule ref="newMolecule" @add="addMolecule" />
+        <UpdateMoleculeDialog ref="updateMolecule" @update="updateMolecule" />
         <ChangeTypeDialog ref="changeTypeMolecule" />
+        <DescriptorDialog ref="descriptor" />
+        <FingerprintsDialog ref="fingerprints" />
         <SearchSubstructuresDialog ref="searchSubstructures" />
         <ChemistryTransformationsDialog ref="chemistryTransformations" />
+        <ChemistryReactions ref="chemistryReactions" />
 
 
     </v-container>
@@ -86,16 +87,22 @@
 
 <script>
 import NewMolecule from './NewMoleculeDialog'
+import UpdateMoleculeDialog from './UpdateMoleculeDialog'
 import ChangeTypeDialog from './ChangeTypeDialog'
+import DescriptorDialog from './DescriptorDialog'
+import FingerprintsDialog from './FingerprintsSimility.vue'
 import SearchSubstructuresDialog from './SearchSubstructuresDialog'
 import ChemistryTransformationsDialog from './ChemistryTransformationsDialog'
+import ChemistryReactions from './ChemistryReactionsDialog.vue'
+
+
 import MoleculeServices from '@/services/MoleculeServices'
 import DateFormatter from '@/utils/DateFormatter'
 
 
 export default {
 
-    components: { NewMolecule, ChangeTypeDialog, SearchSubstructuresDialog, ChemistryTransformationsDialog },
+    components: { NewMolecule, UpdateMoleculeDialog, ChangeTypeDialog, DescriptorDialog, FingerprintsDialog, SearchSubstructuresDialog, ChemistryTransformationsDialog, ChemistryReactions },
     data() {
         return {
             moleculesInfo: []
@@ -103,17 +110,25 @@ export default {
     },
     methods: {
         openNewMoleculeDialog() {
-            console.log("AAA")
             this.$refs.newMolecule.open()
         },
         openChangeType() {
             this.$refs.changeTypeMolecule.open()
+        },
+        openDescriptorDialog() {
+            this.$refs.descriptor.open()
+        },
+        openFingerprints() {
+            this.$refs.fingerprints.open()
         },
         openSearchSubstructures() {
             this.$refs.searchSubstructures.open()
         },
         openChemistryTransformations() {
             this.$refs.chemistryTransformations.open()
+        },
+        openChemistryReactions() {
+            this.$refs.chemistryReactions.open()  
         },
         format(date) {
             return DateFormatter.format(date)
@@ -133,7 +148,13 @@ export default {
 
             }
         },
-        updateMol(mol){
+        async updateMolecule(mol) {
+
+            this.moleculesInfo = this.moleculesInfo.filter(molInfo => molInfo.id !== mol.id)
+            this.moleculesInfo.push(mol)
+
+        },
+        updateMol(mol) {
             this.$refs.updateMolecule.open(mol)
         }
     },

@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model='show' class="d-flex" max-width="900px" :scrollable="false">
-        <v-card>
+        <v-card min-height="600px">
             <v-card-title class="d-flex pa-6" color="red">
                 Conversión de tipos
                 <v-spacer></v-spacer>
@@ -25,7 +25,7 @@
                     </v-textarea>
                 </v-col>
                 <v-col cols="12" class="text-right">
-                    <v-btn color="secondary" @click="convert" class="py-2">
+                    <v-btn color="secondary" @click="convert" class="py-2 fill-height">
                         <font-awesome-icon icon="fa-solid fa-hammer" />
 
                     </v-btn>

@@ -1,6 +1,6 @@
 <template>
-    <v-dialog v-model='show' class="d-flex" max-width="900px" :scrollable="false">
-        <v-card >
+    <v-dialog v-model='show' class="d-flex" max-width="900px"  :scrollable="false">
+        <v-card min-height="600px">
             <v-card-title class="d-flex py-2 px-6">
                 Nueva molécula
                 <v-spacer></v-spacer>
@@ -12,16 +12,16 @@
             <v-card-text class="py-0">
                 <v-col cols="12" class="d-flex pa-0">
                     <v-col cols="5">
-                        <v-select label="Select" v-model="selectedItem" :items="['SMILES', 'Archivo .mol']"></v-select>
+                        <v-select hide-details label="Select" v-model="selectedItem" :items="['SMILES', 'Archivo .mol']"></v-select>
 
                     </v-col>
                     <v-col cols="6">
-                        <v-text-field v-model="smileText" v-if="selectedItem == 'SMILES'"></v-text-field>
-                        <v-file-input v-model="file" v-if="selectedItem == 'Archivo .mol'"></v-file-input>
+                        <v-text-field hide-details="true" v-model="smileText" v-if="selectedItem == 'SMILES'"></v-text-field>
+                        <v-file-input hide-details="true" v-model="file" v-if="selectedItem == 'Archivo .mol'"></v-file-input>
                     </v-col>
-                    <v-col cols="1">
+                    <v-col cols="1" >
 
-                        <v-btn :disabled="!selectedItem" color="secondary" @click="generateMolecule" class="py-2">
+                        <v-btn block :disabled="!selectedItem" color="secondary" @click="generateMolecule" class="py-2 fill-height">
                             <font-awesome-icon icon="fa-solid fa-hammer" />
 
                         </v-btn>
@@ -29,7 +29,7 @@
                 </v-col>
 
                 <v-col cols="12" class="d-flex pa-0">
-                    <v-col cols="5">
+                    <v-col cols="5" v-if="imageUrl">
                         <div class="image-container">
                             <img :src="imageUrl" alt="..." />
                         </div>
@@ -164,7 +164,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 .image-container {
     width: 100%;
     /* El ancho se adapta al contenedor padre */
@@ -185,4 +185,9 @@ export default {
     object-fit: cover;
     /* La imagen cubre completamente el espacio reservado */
 }
+
+.v-input__details{
+    display: none;
+}
+
 </style>

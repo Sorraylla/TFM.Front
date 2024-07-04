@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model='show' class="d-flex" max-width="900px" min-height="500px" :scrollable="false">
-        <v-card min-height="700px">
+        <v-card min-height="680px">
             <v-card-title class="d-flex py-2 px-6">
                 Transformaciones químicas
                 <v-spacer></v-spacer>
